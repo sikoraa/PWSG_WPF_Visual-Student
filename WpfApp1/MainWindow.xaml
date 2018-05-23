@@ -28,7 +28,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="600*"></ColumnDefinition>
                 <ColumnDefinition  Width="5"></ColumnDefinition>
-                <ColumnDefinition Width="200*"></ColumnDefinition>
+                <ColumnDefinition Width="200"></ColumnDefinition>
              </Grid.ColumnDefinitions>
             <Grid Name="left" Grid.Column="0">
                 <Grid.RowDefinitions>
