@@ -6,40 +6,78 @@
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
         Title="Visual Student1" Height="600" Width="800" MinWidth="500" MinHeight="500" WindowStartupLocation="CenterScreen" >
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="boolToVisibility"/>
+    </Window.Resources>
     
     <Grid>
-
-
-        <DockPanel>
-            <Menu DockPanel.Dock="Top">
-                <MenuItem Header="_File">
-                    <MenuItem Header="_New" Click="MenuItem_Click_1"/>
-                    <MenuItem Header="_Open File" Click="MenuItem_Click_2"/>
-                    <MenuItem Header="O_pen Project" Click="MenuItem_Click_3"/>
-                    <Separator></Separator>
-                    <MenuItem Header="_Exit" Click="MenuItem_Click_4"/>
-                </MenuItem>
-                <MenuItem Header="About" Click="MenuItem_Click">
-                </MenuItem>
-            </Menu>
-            <StackPanel></StackPanel>
-        </DockPanel>
-        <Grid Margin="0,20,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <DockPanel>
+                <Menu DockPanel.Dock="Top">
+                    <MenuItem Header="_File">
+                        <MenuItem Header="_New" Click="MenuItem_Click_1" InputGestureText="Ctrl+N"/>
+                        <MenuItem Header="_Save" Click="MenuItem_Click_5" InputGestureText="Ctrl+S"/>
+                        <MenuItem Header="Save As" Click="MenuItem_Click_6" />
+                        <MenuItem Header="_Open File" Click="MenuItem_Click_2" InputGestureText="Ctrl+O"/>
+                        <MenuItem Header="O_pen Project" Click="MenuItem_Click_3"/>
+                        <Separator></Separator>
+                        <MenuItem Header="_Exit" Click="MenuItem_Click_4"/>
+                    </MenuItem>
+                    <MenuItem Header="Plugins">
+                        <MenuItem Header="Syntax Highlight Plugin 1" Click="MenuItem_Click_7"></MenuItem>
+                        <MenuItem Header="Syntax Highlight Plugin 2" Click="MenuItem_Click_8"></MenuItem>
+                    </MenuItem>
+                    <MenuItem Header="About" Click="MenuItem_Click">
+                    </MenuItem>
+                </Menu>
+                <StackPanel></StackPanel>
+            </DockPanel>
+        </Grid>
+        <Grid Grid.Row="2">
+            <!--Margin="0,20,0,0">-->
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="600*"></ColumnDefinition>
+                <ColumnDefinition  Width="*"></ColumnDefinition>
                 <ColumnDefinition  Width="5"></ColumnDefinition>
                 <ColumnDefinition Width="200"></ColumnDefinition>
              </Grid.ColumnDefinitions>
-            <Grid Name="left" Grid.Column="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Name="listrow"  Height="0"></RowDefinition>
-                    <RowDefinition Height="*"></RowDefinition>
-                
-                </Grid.RowDefinitions>
-                <TabControl Name="listbox1" Height="20" Grid.Row="0" SelectionChanged="TabControl_SelectionChanged"> </TabControl>
+            <TabControl Name="listbox1" SelectionChanged="TabControl_SelectionChanged" ItemsSource="{Binding tab }" HorizontalAlignment="Stretch" Grid.Column="0">
+                <TabControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>                       
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                <ColumnDefinition Width="2"></ColumnDefinition>
+                                <ColumnDefinition Width="25"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Binding Name, UpdateSourceTrigger=PropertyChanged" VerticalAlignment="Center"></TextBlock>
+                            <TextBlock Grid.Column="1" Text="*" Visibility="{Binding changed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource boolToVisibility}}" VerticalAlignment="Center" />
+                            <Button Grid.Column="2" Content="X" VerticalAlignment="Center" Margin="3 0" Click="CloseFile"/>
+                        </Grid>
+
+                    </DataTemplate>
+                </TabControl.ItemTemplate>
+                <TabControl.ContentTemplate>
+                    <DataTemplate>
+                        <RichTextBox VerticalScrollBarVisibility="Auto" PreviewTextInput="RichTextBox_PreviewTextInput">
+                            <FlowDocument FontSize="12" FontFamily="Monaco">
+                                <Paragraph Margin="0">
+                                    <Run Text="{Binding Body, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                </Paragraph>
+                            </FlowDocument>
+                        </RichTextBox>
+                    </DataTemplate>
+                </TabControl.ContentTemplate>
+                <!--<TabItem>
                 <RichTextBox Name="txtbox" Grid.Row="1"></RichTextBox>
-            </Grid>
-            <GridSplitter  HorizontalAlignment="Stretch" Grid.Column="1" Width="5"  Foreground="#FF5B5B5B" Background="#FF767676"> </GridSplitter>
+                </TabItem>-->
+            </TabControl>
+            <GridSplitter  HorizontalAlignment="Center" Grid.Column="1" Width="5"  Foreground="#FF5B5B5B" Background="#FF767676"> </GridSplitter>
             <TreeView Grid.Column="2" Background="#FFE9FAFF"></TreeView>
         </Grid>
         

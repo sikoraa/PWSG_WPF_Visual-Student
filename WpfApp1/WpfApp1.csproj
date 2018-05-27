@@ -36,13 +36,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PluginContracts">
-      <HintPath>..\..\PluginContracts.dll</HintPath>
+      <HintPath>..\PluginContracts.dll</HintPath>
     </Reference>
     <Reference Include="SyntaxHighlight">
-      <HintPath>..\..\SyntaxHighlight.dll</HintPath>
+      <HintPath>..\SyntaxHighlight.dll</HintPath>
     </Reference>
     <Reference Include="SyntaxHighlight2">
-      <HintPath>..\..\SyntaxHighlight2.dll</HintPath>
+      <HintPath>..\SyntaxHighlight2.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -73,6 +73,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="file.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
