@@ -11,7 +11,7 @@ using System.Windows;
 
 namespace WpfApp1
 {
-    public class file
+    public class file : INotifyPropertyChanged
     {
         string name;
         string path;
@@ -24,7 +24,7 @@ namespace WpfApp1
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public file(string n="New File", string p="", string c="", bool ch=true)
+        public file(string n="New File", string p="", string c="", bool ch=false)
         {
             Name = n; Path = p; Content = c; changed = ch;
         }
@@ -98,8 +98,8 @@ namespace WpfApp1
             s.OverwritePrompt = true;
             if (s.ShowDialog() == true)
             {
-                this.path = System.IO.Path.GetFullPath(s.FileName);
-                this.name = System.IO.Path.GetFileName(s.FileName);
+                Path = System.IO.Path.GetFullPath(s.FileName);
+                Name = System.IO.Path.GetFileName(s.FileName);
             }
             else return; // nie wybrano nazwy/sciezki
             try

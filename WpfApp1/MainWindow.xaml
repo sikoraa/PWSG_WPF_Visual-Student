@@ -204,7 +204,7 @@
 
             </Grid>
             <GridSplitter ShowsPreview="True" HorizontalAlignment="Center" Grid.Column="1" Width="5"  Foreground="#FF5B5B5B" Background="#FF767676"> </GridSplitter>
-            <TreeView Name ="projectTree" ItemsSource="{Binding}" Grid.Column="2" Background="#FFE9FAFF" MouseDoubleClick="treeview_MouseDoubleClick"></TreeView>
+            <TreeView Name ="projectTree" ItemsSource="{Binding}" Grid.Column="2" Background="#FFE9FAFF" MouseDoubleClick="treeview_MouseDoubleClick" SelectedItemChanged="projectTree_SelectedItemChanged"></TreeView>
         </Grid>
         
 
