@@ -11,26 +11,8 @@
 
     <Window.Resources>
         <!--<BooleanToVisibilityConverter x:Key="boolToVisibility"/>-->
+        <CollectionViewSource Source="{Binding Plugins}" x:Key="source"/>
         <BooleanToVisibilityConverter x:Key="boolToVisibilityConverter"/>
-        <!--<HierarchicalDataTemplate DataType="{x:Type Model:ProjItem}"
-                                  ItemsSource="{Binding Items}">
-            <TextBlock Text="Project: {Binding Path=Name}" ToolTip="{Binding Path=Path}" />
-        </HierarchicalDataTemplate>
-
-        <HierarchicalDataTemplate DataType="{x:Type Model:DirectoryItem}"
-                                  ItemsSource="{Binding Items}">
-            <TextBlock Text="{Binding Path=Name}" ToolTip="{Binding Path=Path}" />
-        </HierarchicalDataTemplate>
-
-        <DataTemplate DataType="{x:Type Model:FileItem}">
-            <TextBlock Text="{Binding Path=Name}" ToolTip="{Binding Path=Path}" />
-        </DataTemplate>-->
-
-
-        <!--<HierarchicalDataTemplate DataType="{x:Type Model:ProjItem}"
-                                  ItemsSource="{Binding Items}">
-            <TextBlock Text="{Binding Path=Name}" ToolTip="{Binding Path=Path}" />
-        </HierarchicalDataTemplate>-->
         
         <HierarchicalDataTemplate DataType="{x:Type Model:DirectoryItem}"
                                   ItemsSource="{Binding Items}">
@@ -82,7 +64,7 @@
                         <BeginStoryboard>
                             <Storyboard>
                                 <DoubleAnimation Storyboard.TargetProperty="LayoutTransform.ScaleX"
-                                                 To="1.2" Duration="0:0:0.5"></DoubleAnimation>
+                                                 To="1.20" Duration="0:0:0.1"></DoubleAnimation>
                             </Storyboard>
                         </BeginStoryboard>
                     </EventTrigger.Actions>
@@ -92,7 +74,7 @@
                         <BeginStoryboard>
                             <Storyboard>
                                 <DoubleAnimation Storyboard.TargetProperty="LayoutTransform.ScaleX"
-                                                  Duration="0:0:0.3"></DoubleAnimation>
+                                                  Duration="0:0:0.1"></DoubleAnimation>
                             </Storyboard>
                         </BeginStoryboard>
                     </EventTrigger.Actions>

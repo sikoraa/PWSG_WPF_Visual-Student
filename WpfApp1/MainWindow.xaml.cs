@@ -33,6 +33,8 @@ namespace WpfApp1
         }
 
         ObservableCollection<file> tab;
+        ObservableCollection<System.Windows.Controls.RichTextBox> textBoxes = new ObservableCollection<System.Windows.Controls.RichTextBox>();
+
         List<Item> l = new List<Item>();
         file openedFile = null;
         string project = "";
@@ -170,19 +172,19 @@ namespace WpfApp1
 
         private void RichTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Tab[OpenedTab].Changed = true;
+            //Tab[OpenedTab].Changed = true;
 
-            //System.Windows.Controls.RichTextBox tmp = (System.Windows.Controls.RichTextBox)sender;
-            //TextRange range = new TextRange(tmp.Document.ContentStart, tmp.Document.ContentEnd);
-            //string prev = range.Text;
-            //string c = Tab[OpenedTab].Content;
-            //Tab[OpenedTab].Content = range.Text;
+            System.Windows.Controls.RichTextBox tmp = (System.Windows.Controls.RichTextBox)sender;
+            TextRange range = new TextRange(tmp.Document.ContentStart, tmp.Document.ContentEnd);
+            string prev = range.Text;
+            string c = Tab[OpenedTab].Content;
+            Tab[OpenedTab].Content = range.Text;
 
-            ////foreach (int i in AppliedPlugins)
-            ////    Plugins[i].Do(richTextBox);
+            //foreach (int i in AppliedPlugins)
+            //    Plugins[i].Do(richTextBox);
 
-            //if (prev.Substring(0, c.Length) != c)
-            //    Tab[OpenedTab].Changed = true;
+            if (prev.Substring(0, c.Length) != c)
+                Tab[OpenedTab].Changed = true;
         }
 
         private void treeview_MouseDoubleClick(object sender, MouseButtonEventArgs e) // double click na plik w treeview
@@ -203,7 +205,23 @@ namespace WpfApp1
 
         private void RichTextBox_Loaded(object sender, RoutedEventArgs e)
         {
+            System.Windows.Controls.RichTextBox tmp = (System.Windows.Controls.RichTextBox)sender;
+            Paragraph paragraph = new Paragraph();
+            Run run = new Run();
+            run.Text = Tab[OpenedTab].Content;
 
+            paragraph.Margin = new Thickness(0);
+            paragraph.FontFamily = new FontFamily("Monaco");
+            paragraph.FontSize = 12;
+            paragraph.Inlines.Add(run);
+            FlowDocument flowDocument = new FlowDocument(paragraph);
+            tmp.Document = flowDocument;
+
+            //foreach (int i in AppliedPlugins)
+            //    Plugins[i].Do(rtb);
+
+            if (!textBoxes.Contains(tmp))
+                textBoxes.Add(tmp);
         }
     }
 }

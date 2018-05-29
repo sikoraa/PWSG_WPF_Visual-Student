@@ -60,5 +60,7 @@ namespace WpfApp1
             p.Add(new DirectoryItem("Project: " + Path.GetFileNameWithoutExtension(n), csProj, ret));
             return p;
         }
+
+        
     }
 }
