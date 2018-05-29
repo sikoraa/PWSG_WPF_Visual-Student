@@ -39,13 +39,17 @@ namespace WpfApp1
         int openedTab = 0;
 
         public int OpenedTab { get => openedTab; set { openedTab = value; OnPropertyChanged(); } }
+        public ObservableCollection<file> Tab { get => tab; set { tab = value; OnPropertyChanged(); } }
+
+        //public ObservableCollection<file> Tab1 { get => tab; set => tab = value; }
 
         public MainWindow()
         {
-            InitializeComponent();
             DataContext = this;
-            tab = new ObservableCollection<file>();          
-            listbox1.ItemsSource = tab;
+            InitializeComponent();
+      
+            Tab = new ObservableCollection<file>();          
+            listbox1.ItemsSource = Tab;
             
         }
 
@@ -60,27 +64,9 @@ namespace WpfApp1
             file f = new file();
             f.Changed = true;
             openedFile = f;
-            tab.Add(f);          
-            OpenedTab = listbox1.SelectedIndex = openedFiles - 1;
-        }
-
-        //private void RichTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        //{
-        //    if (openedFile != null)
-        //        openedFile.Changed = true;
-        //}
-
-        void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-            if (e.Source is System.Windows.Controls.TabControl)
-            {
-                OpenedTab = listbox1.SelectedIndex;
-                if (OpenedTab >= 0)
-                    openedFile = tab[OpenedTab];
-                else
-                    openedFile = null;
-            }
+            Tab.Add(f);
+            //OpenedTab = listbox1.SelectedIndex = openedFiles - 1;
+            OpenedTab = Tab.Count - 1;
         }
 
         private void MenuItem_Click_2(object sender, RoutedEventArgs e) // Open file
@@ -93,13 +79,13 @@ namespace WpfApp1
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 file tmp = new file();
-                tab.Add(tmp);
+                Tab.Add(tmp);
                 tmp.LoadFile(openFileDialog.FileName);
                 openedFile = tmp;
                 
                 ++openedFiles;
-                OpenedTab = listbox1.SelectedIndex = openedFiles - 1;
-
+                //OpenedTab = listbox1.SelectedIndex = openedFiles - 1;
+                OpenedTab = Tab.Count - 1;
                 
 
             }
@@ -164,7 +150,7 @@ namespace WpfApp1
                 if (System.Windows.MessageBox.Show("This file has been modified. Do you want to save before closing?", "Save file?", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                     f.Save();
             }
-            tab.Remove(f);
+            Tab.Remove(f);
         }
 
         private void MenuItem_Click_7(object sender, RoutedEventArgs e) // highlight plugin1
@@ -184,7 +170,19 @@ namespace WpfApp1
 
         private void RichTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
+            Tab[OpenedTab].Changed = true;
 
+            //System.Windows.Controls.RichTextBox tmp = (System.Windows.Controls.RichTextBox)sender;
+            //TextRange range = new TextRange(tmp.Document.ContentStart, tmp.Document.ContentEnd);
+            //string prev = range.Text;
+            //string c = Tab[OpenedTab].Content;
+            //Tab[OpenedTab].Content = range.Text;
+
+            ////foreach (int i in AppliedPlugins)
+            ////    Plugins[i].Do(richTextBox);
+
+            //if (prev.Substring(0, c.Length) != c)
+            //    Tab[OpenedTab].Changed = true;
         }
 
         private void treeview_MouseDoubleClick(object sender, MouseButtonEventArgs e) // double click na plik w treeview
@@ -193,11 +191,11 @@ namespace WpfApp1
             if (tmp is FileItem)
             {
                 FileItem f = tmp as FileItem;
-                for (int i = 0; i < tab.Count; ++i) // jesli taki plik jest juz otwarty, to damy mu focus
-                    if (f.Name == tab[i].Name && f.Path == tab[i].Path)
-                        { OpenedTab = i; openedFile = tab[i]; return; }
+                for (int i = 0; i < Tab.Count; ++i) // jesli taki plik jest juz otwarty, to damy mu focus
+                    if (f.Name == Tab[i].Name && f.Path == Tab[i].Path)
+                        { OpenedTab = i; openedFile = Tab[i]; return; }
                 // otwieramy plik jesli nie byl otwarty
-                tab.Add(new file(f.Name, f.Path, File.ReadAllText(f.Path), false));
+                Tab.Add(new file(f.Name, f.Path, File.ReadAllText(f.Path), false));
                 ++openedFiles;
                 OpenedTab = openedFiles - 1;
             }
