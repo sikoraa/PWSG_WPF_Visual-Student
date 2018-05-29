@@ -31,10 +31,10 @@
                     <ColumnDefinition Width="25"/>
                 </Grid.ColumnDefinitions>
                 <!--, diag:PresentationTraceSources.TraceLevel=High-->
-                <TextBlock Grid.Column="0" Text="{Binding Name }" x:Name="HeaderName" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="0" Text="{Binding Name}" x:Name="HeaderName" VerticalAlignment="Center"/>
                 <!--Visibility="{Binding Modified, Mode=TwoWay, Converter={StaticResource boolToVisibilityConverter}}"-->
                 <TextBlock Grid.Column="1" Text="*" Margin="-1 0" diag:PresentationTraceSources.TraceLevel="High"  Visibility="{Binding Changed, Mode=TwoWay, Converter={StaticResource boolToVisibilityConverter}}" x:Name="HeaderModified" VerticalAlignment="Center" />
-                <Button Grid.Column="2" Content="X" VerticalAlignment="Center" Margin="6 0" Click="CloseFile" />
+                <Button Grid.Column="2" Content="X" Margin="6 0" VerticalAlignment="Center"  Click="CloseFile" />
             </Grid>
         </DataTemplate>
 
@@ -190,26 +190,7 @@
                                             </Style>
                                         </TabControl.Resources>
                                 </TabControl>
-                <!--<TabControl.ContentTemplate>
-                                        <DataTemplate>
-                                            <RichTextBox VerticalScrollBarVisibility="Auto" PreviewTextInput="RichTextBox_PreviewTextInput" TextChanged="RichTextBox_TextChanged">
-                                                <FlowDocument FontSize="12" FontFamily="Monaco">
-                                                    <Paragraph Margin="0">
-                                                        <Run Text="{Binding Content, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                                    </Paragraph>
-                                                </FlowDocument>
-                                            </RichTextBox>
-                                        </DataTemplate>
-                                    </TabControl.ContentTemplate>-->
                 
-                
-                
-                
-                                    <!--<TabItem>
-                                    <RichTextBox Name="txtbox" Grid.Row="1"></RichTextBox>
-                                    </TabItem>-->
-                                
-
 
                 <TabControl Grid.Row="1" x:Name="consoleControl" Margin="0 3" TabStripPlacement="Bottom" ItemContainerStyle="{StaticResource AnimatedTabItem}">
                     <TabItem Header="Output" Foreground="DarkBlue" x:Name="ConsoleMessagesTabItem">

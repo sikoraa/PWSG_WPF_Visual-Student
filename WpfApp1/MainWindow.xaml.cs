@@ -34,15 +34,17 @@ namespace WpfApp1
 
         ObservableCollection<file> tab;
         ObservableCollection<System.Windows.Controls.RichTextBox> textBoxes = new ObservableCollection<System.Windows.Controls.RichTextBox>();
+        ObservableCollection<Item> l = new ObservableCollection < Item >();
 
-        List<Item> l = new List<Item>();
+
+        //List<Item> l = new List<Item>();
         file openedFile = null;
         string project = "";
-        int openedTab = 0;
+        int openedTab;
 
         public int OpenedTab { get => openedTab; set { openedTab = value; OnPropertyChanged(); } }
         public ObservableCollection<file> Tab { get => tab; set { tab = value; OnPropertyChanged(); } }
-
+        public object ViewModel { get; private set; }
         //public ObservableCollection<file> Tab1 { get => tab; set => tab = value; }
 
         public MainWindow()
@@ -52,6 +54,7 @@ namespace WpfApp1
       
             Tab = new ObservableCollection<file>();          
             listbox1.ItemsSource = Tab;
+            openedTab = 0;
             
         }
 
@@ -69,6 +72,7 @@ namespace WpfApp1
             Tab.Add(f);
             //OpenedTab = listbox1.SelectedIndex = openedFiles - 1;
             OpenedTab = Tab.Count - 1;
+            listbox1.Items.Refresh();
         }
 
         private void MenuItem_Click_2(object sender, RoutedEventArgs e) // Open file
@@ -87,10 +91,9 @@ namespace WpfApp1
                 
                 ++openedFiles;
                 //OpenedTab = listbox1.SelectedIndex = openedFiles - 1;
-                OpenedTab = Tab.Count - 1;
-                
-
+                OpenedTab = Tab.Count - 1;                
             }
+            listbox1.Items.Refresh();
 
 
 
@@ -110,7 +113,7 @@ namespace WpfApp1
                 projectTree.DataContext = l;
                 projectTree.Items.Refresh();
             }
-
+            listbox1.Items.Refresh();
         }
 
         private void MenuItem_Click_4(object sender, RoutedEventArgs e) // Exit button
@@ -122,12 +125,14 @@ namespace WpfApp1
         {
             if (openedFiles > 0 && openedFile != null)
                 openedFile.SaveAs();
+            listbox1.Items.Refresh();
         }
 
         private void MenuItem_Click_5(object sender, RoutedEventArgs e) // save
         {
             if (openedFiles > 0 && openedFile != null)
                 openedFile.Save();
+            listbox1.Items.Refresh();
         }
 
         private void TabItem_Loaded(object sender, RoutedEventArgs e)
@@ -142,6 +147,7 @@ namespace WpfApp1
                 tabItem.Content = dataTemplate.LoadContent();
                 (tabItem.Content as FrameworkElement).DataContext = tabItem.DataContext;
             }
+            //listbox1.Items.Refresh();
         }
 
         private void CloseFile(object sender, RoutedEventArgs e) // X button, close file
@@ -149,25 +155,36 @@ namespace WpfApp1
             file f = ((sender as System.Windows.Controls.Button).DataContext) as file;
             if (f.Changed)
             {
-                if (System.Windows.MessageBox.Show("This file has been modified. Do you want to save before closing?", "Save file?", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                    f.Save();
+                if (System.Windows.MessageBox.Show("Do you want to close unsaved document?", "Close Document", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    Tab.Remove(f);
+                    --openedFiles;
+                    OpenedTab = tab.Count - 1;
+                }
             }
-            Tab.Remove(f);
+            else
+            {
+                Tab.Remove(f);
+                --openedFiles;
+                OpenedTab = tab.Count - 1;
+            }
+            listbox1.Items.Refresh();
+
         }
 
         private void MenuItem_Click_7(object sender, RoutedEventArgs e) // highlight plugin1
         {
-
+            listbox1.Items.Refresh();
         }
 
         private void MenuItem_Click_8(object sender, RoutedEventArgs e) // highlight plugin2
         {
-
+            listbox1.Items.Refresh();
         }
 
         private void MenuItem_Click_9(object sender, RoutedEventArgs e) // highlight plugin2
         {
-
+            listbox1.Items.Refresh();
         }
 
         private void RichTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -185,6 +202,7 @@ namespace WpfApp1
 
             if (prev.Substring(0, c.Length) != c)
                 Tab[OpenedTab].Changed = true;
+            //listbox1.Items.Refresh();
         }
 
         private void treeview_MouseDoubleClick(object sender, MouseButtonEventArgs e) // double click na plik w treeview
@@ -200,6 +218,7 @@ namespace WpfApp1
                 Tab.Add(new file(f.Name, f.Path, File.ReadAllText(f.Path), false));
                 ++openedFiles;
                 OpenedTab = openedFiles - 1;
+                //listbox1.Items.Refresh();
             }
         }
 
@@ -222,6 +241,7 @@ namespace WpfApp1
 
             if (!textBoxes.Contains(tmp))
                 textBoxes.Add(tmp);
+            //listbox1.Items.Refresh();
         }
     }
 }
