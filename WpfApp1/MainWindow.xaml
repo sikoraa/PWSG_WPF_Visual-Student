@@ -3,14 +3,147 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
+        xmlns:Model="clr-namespace:WpfApp1" 
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
         Title="Visual Student1" Height="600" Width="800" MinWidth="500" MinHeight="500" WindowStartupLocation="CenterScreen" >
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="boolToVisibility"/>
+        <BooleanToVisibilityConverter x:Key="boolToVisibilityConverter"/>
+        <!--<HierarchicalDataTemplate DataType="{x:Type Model:ProjItem}"
+                                  ItemsSource="{Binding Items}">
+            <TextBlock Text="Project: {Binding Path=Name}" ToolTip="{Binding Path=Path}" />
+        </HierarchicalDataTemplate>
+
+        <HierarchicalDataTemplate DataType="{x:Type Model:DirectoryItem}"
+                                  ItemsSource="{Binding Items}">
+            <TextBlock Text="{Binding Path=Name}" ToolTip="{Binding Path=Path}" />
+        </HierarchicalDataTemplate>
+
+        <DataTemplate DataType="{x:Type Model:FileItem}">
+            <TextBlock Text="{Binding Path=Name}" ToolTip="{Binding Path=Path}" />
+        </DataTemplate>-->
+
+
+        <!--<HierarchicalDataTemplate DataType="{x:Type Model:ProjItem}"
+                                  ItemsSource="{Binding Items}">
+            <TextBlock Text="{Binding Path=Name}" ToolTip="{Binding Path=Path}" />
+        </HierarchicalDataTemplate>-->
+        
+        <HierarchicalDataTemplate DataType="{x:Type Model:DirectoryItem}"
+                                  ItemsSource="{Binding Items}">
+            <TextBlock Text="{Binding Path=Name}" ToolTip="{Binding Path=Path}" />
+        </HierarchicalDataTemplate>
+
+        <DataTemplate DataType="{x:Type Model:FileItem}">
+            <TextBlock Text="{Binding Path=Name}" ToolTip="{Binding Path=Path}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="Htemplate" DataType="TabItem.Header">
+            <Grid x:Name="MainGrid">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="3"/>
+                    <ColumnDefinition Width="25"/>
+                </Grid.ColumnDefinitions>
+                <!--, diag:PresentationTraceSources.TraceLevel=High-->
+                <TextBlock Grid.Column="0" Text="{Binding Name }" x:Name="HeaderName" VerticalAlignment="Center"/>
+                <!--Visibility="{Binding Modified, Mode=TwoWay, Converter={StaticResource boolToVisibilityConverter}}"-->
+                <TextBlock Grid.Column="1" Text="*" Margin="-1 0"  Visibility="{Binding Changed, Mode=TwoWay, Converter={StaticResource boolToVisibilityConverter}}" x:Name="HeaderModified" VerticalAlignment="Center" />
+                <Button Grid.Column="2" Content="X" VerticalAlignment="Center" Margin="6 0" Click="CloseFile" />
+            </Grid>
+        </DataTemplate>
+
+
+        <DataTemplate x:Key="errorMessageTemplate">
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{Binding Code, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" Margin="7 0"/>
+                <TextBlock Grid.Column="1" Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}" Margin="7 0"/>
+                <TextBlock Grid.Column="2" Text="{Binding Line, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" Margin="7 0"/>
+            </Grid>
+        </DataTemplate>
+        
+        <Style TargetType="TabItem" x:Key="AnimatedTabItem">
+            <Setter Property="LayoutTransform">
+                <Setter.Value>
+                    <ScaleTransform/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="Button.MouseEnter">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="LayoutTransform.ScaleX"
+                                                 To="1.2" Duration="0:0:0.5"></DoubleAnimation>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="Button.MouseLeave">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="LayoutTransform.ScaleX"
+                                                  Duration="0:0:0.3"></DoubleAnimation>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="errorListBoxStyle" TargetType="{x:Type ListBoxItem}">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Background" Value="IndianRed"/>
+            <Setter Property="ContentTemplate" Value="{StaticResource errorMessageTemplate}" />
+
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="PaleVioletRed" />
+                </Trigger>
+                <Trigger Property="IsSelected" Value="False">
+                    <Setter Property="Background" Value="IndianRed" />
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="PaleVioletRed" />
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="False">
+                    <Setter Property="Background" Value="IndianRed" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <DataTemplate x:Key="RichTextBoxTemplate">
+            <RichTextBox VerticalScrollBarVisibility="Auto" TextChanged="RichTextBox_TextChanged" Loaded="RichTextBox_Loaded"/>
+        </DataTemplate>
+
+
     </Window.Resources>
-    
+
+    <Window.CommandBindings>
+        <CommandBinding Command="Open" Executed="MenuItem_Click_3"></CommandBinding>
+        <CommandBinding Command="Save" Executed="MenuItem_Click_5"></CommandBinding>
+        <CommandBinding Command="New" Executed="MenuItem_Click_1"></CommandBinding>
+        <CommandBinding Command="Select" Executed="MenuItem_Click_9"></CommandBinding>
+    </Window.CommandBindings>
+
+    <Window.InputBindings>
+        <KeyBinding Key="O" Modifiers="Control" Command="Open"></KeyBinding>
+        <KeyBinding Key="S" Modifiers="Control" Command="Save"></KeyBinding>
+        <KeyBinding Key="N" Modifiers="Control" Command="New"></KeyBinding>
+        <KeyBinding Key="F5" Command="Select"></KeyBinding>
+    </Window.InputBindings>
+
+
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"></RowDefinition>
@@ -39,6 +172,22 @@
                 <StackPanel></StackPanel>
             </DockPanel>
         </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+            <ComboBox Grid.Column="0" Margin ="0 0 " SelectedIndex="0" VerticalAlignment="Center" x:Name="chooseComboBox">
+                <ComboBoxItem Content="Build"/>
+                <ComboBoxItem Content="Build + Run"/>
+            </ComboBox>
+            <Button Grid.Column="1" Margin="6 6" Content="Execute" Command="Select"/>
+            <!--<Button Grid.Column="2" Margin="6 6" Content="test" Click="Button_Click_1" />-->
+        </Grid>
+
+
         <Grid Grid.Row="2">
             <!--Margin="0,20,0,0">-->
             <Grid.ColumnDefinitions>
@@ -46,39 +195,53 @@
                 <ColumnDefinition  Width="5"></ColumnDefinition>
                 <ColumnDefinition Width="200"></ColumnDefinition>
              </Grid.ColumnDefinitions>
-            <TabControl Name="listbox1" SelectionChanged="TabControl_SelectionChanged" ItemsSource="{Binding tab }" HorizontalAlignment="Stretch" Grid.Column="0">
-                <TabControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>                       
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                <ColumnDefinition Width="2"></ColumnDefinition>
-                                <ColumnDefinition Width="25"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="Binding Name, UpdateSourceTrigger=PropertyChanged" VerticalAlignment="Center"></TextBlock>
-                            <TextBlock Grid.Column="1" Text="*" Visibility="{Binding changed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource boolToVisibility}}" VerticalAlignment="Center" />
-                            <Button Grid.Column="2" Content="X" VerticalAlignment="Center" Margin="3 0" Click="CloseFile"/>
-                        </Grid>
 
-                    </DataTemplate>
-                </TabControl.ItemTemplate>
-                <TabControl.ContentTemplate>
-                    <DataTemplate>
-                        <RichTextBox VerticalScrollBarVisibility="Auto" PreviewTextInput="RichTextBox_PreviewTextInput">
-                            <FlowDocument FontSize="12" FontFamily="Monaco">
-                                <Paragraph Margin="0">
-                                    <Run Text="{Binding Body, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                </Paragraph>
-                            </FlowDocument>
-                        </RichTextBox>
-                    </DataTemplate>
-                </TabControl.ContentTemplate>
-                <!--<TabItem>
-                <RichTextBox Name="txtbox" Grid.Row="1"></RichTextBox>
-                </TabItem>-->
-            </TabControl>
-            <GridSplitter  HorizontalAlignment="Center" Grid.Column="1" Width="5"  Foreground="#FF5B5B5B" Background="#FF767676"> </GridSplitter>
-            <TreeView Grid.Column="2" Background="#FFE9FAFF"></TreeView>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+                                <TabControl Name="listbox1"  SelectedIndex="{Binding openedTab}" ItemsSource="{Binding tab}" ItemTemplate="{StaticResource Htemplate}"  HorizontalAlignment="Stretch" Grid.Row="0">
+                                        <TabControl.Resources>
+                                            <Style TargetType="TabItem">
+                                                <EventSetter Event="Loaded" Handler="TabItem_Loaded" />
+                                            </Style>
+                                        </TabControl.Resources>
+                                </TabControl>
+                <!--<TabControl.ContentTemplate>
+                                        <DataTemplate>
+                                            <RichTextBox VerticalScrollBarVisibility="Auto" PreviewTextInput="RichTextBox_PreviewTextInput" TextChanged="RichTextBox_TextChanged">
+                                                <FlowDocument FontSize="12" FontFamily="Monaco">
+                                                    <Paragraph Margin="0">
+                                                        <Run Text="{Binding Content, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    </Paragraph>
+                                                </FlowDocument>
+                                            </RichTextBox>
+                                        </DataTemplate>
+                                    </TabControl.ContentTemplate>-->
+                
+                
+                
+                
+                                    <!--<TabItem>
+                                    <RichTextBox Name="txtbox" Grid.Row="1"></RichTextBox>
+                                    </TabItem>-->
+                                
+
+
+                <TabControl Grid.Row="1" x:Name="consoleControl" Margin="0 3" TabStripPlacement="Bottom" ItemContainerStyle="{StaticResource AnimatedTabItem}">
+                    <TabItem Header="Output" Foreground="DarkBlue" x:Name="ConsoleMessagesTabItem">
+                        <TextBox Text="{Binding ConsoleMessages}" x:Name="ConsoleMessagesTextBlock" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" IsReadOnly="True" TextWrapping="Wrap"/>
+                    </TabItem>
+                    <TabItem Header="Error List" Foreground="Red" x:Name="ErrorMessagesTabItem">
+                        <ListBox ItemsSource="{Binding ErrorMessages, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource errorListBoxStyle}" x:Name="errorListBox" ScrollViewer.HorizontalScrollBarVisibility="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                        </ListBox>
+                    </TabItem>
+                </TabControl>
+
+            </Grid>
+            <GridSplitter ShowsPreview="True" HorizontalAlignment="Center" Grid.Column="1" Width="5"  Foreground="#FF5B5B5B" Background="#FF767676"> </GridSplitter>
+            <TreeView Name ="projectTree" ItemsSource="{Binding}" Grid.Column="2" Background="#FFE9FAFF" MouseDoubleClick="treeview_MouseDoubleClick"></TreeView>
         </Grid>
         
 

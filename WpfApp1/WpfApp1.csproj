@@ -65,6 +65,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="EnumConverter.cs" />
+    <Compile Include="TreeListView\DirectoryItem.cs" />
+    <Compile Include="TreeListView\FileItem.cs" />
+    <Compile Include="TreeListView\ItemProvider.cs" />
+    <Compile Include="TreeListView\Item.cs" />
+    <Compile Include="TreeListView\ProjItem.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
